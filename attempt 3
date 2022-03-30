@@ -1,36 +1,53 @@
-# This is a basic workflow to help you get started with Actions
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-name: CI
+namespace CMP1903M_Assessment_1_Base_Code
+{
+    class Program
+    {
+        static void Main() //where program begins
+        {
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+            //Create 'Input' object
+            //Get either manually entered text, or text from a file
+            Input I = new(); //new input object
+            string choice = I.userChoice(); //get user input for what method of text entry they wish to use
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+            string text = ""; //declare text here so it has the correct level of scope
+            if (choice == "1")
+            {
+                text = I.manualTextInput(); //if '1' is the user choice the manual text entry method is selected
+            }
+            else if (choice == "2")
+            {
+                text = I.fileTextInput(); //if '2' is selected the read a text file method is selected
+            }
+           
+            
+            //Create an 'Analyse' object
+            //Pass the text input to the 'analyseText' method
+            Analyse A = new(); //new analyse object
+            List<int> results = A.analyseText(text); //Receive a list of integers back
+            if (choice == "2")
+            {
+                A.longWords(text);
+            }
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+            //Report the results of the analysis
+            Report R = new(); //new report object
+            R.outputConsoleResults(results); //run report method, prints analysis values to console, no return value
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+            //TO ADD: Get the frequency of individual letters?
+            List<int> letters = A.lettersText(text); //geta list of how many of each letter there is (upper and lower case)
+            R.outputConsoleLetters(letters); //prints the list onto the console
+        }
+
+
+
+    }
+}
